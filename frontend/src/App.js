@@ -75,10 +75,41 @@ function App() {
         };
     };
 
+    // Helper function to format date for the button
+    const formatButtonDate = (dateString) => {
+        const year = dateString.slice(0, 4);
+        const month = parseInt(dateString.slice(4, 6));
+        const day = parseInt(dateString.slice(6));
+        const dayOfWeek = getDayOfWeek(dateString);
+
+        // Korean month names
+        const monthNames = [
+            "1월",
+            "2월",
+            "3월",
+            "4월",
+            "5월",
+            "6월",
+            "7월",
+            "8월",
+            "9월",
+            "10월",
+            "11월",
+            "12월",
+        ];
+
+        return {
+            day: day,
+            month: monthNames[month - 1],
+            weekday: dayOfWeek,
+        };
+    };
+
     return (
         <div className={`app ${darkMode ? "dark-theme" : "light-theme"}`}>
             <div className="app-container">
                 <div className="header-actions">
+                    <span className="app-title">급식</span>
                     <button className="theme-toggle" onClick={toggleTheme}>
                         {darkMode ? (
                             <i className="bi bi-moon-fill"></i>
@@ -89,21 +120,9 @@ function App() {
                 </div>
 
                 <div className="date-navigator">
+                    {/* The current-date display is now hidden via CSS */}
                     <div className="current-date">
-                        {today && (
-                            <>
-                                <span className="date-year">
-                                    {formatDate(today).year}
-                                </span>
-                                <span className="date-monthday">
-                                    {formatDate(today).month}월{" "}
-                                    {formatDate(today).day}일
-                                </span>
-                                <span className="date-weekday">
-                                    ({getDayOfWeek(today)})
-                                </span>
-                            </>
-                        )}
+                        {/* ...existing code... */}
                     </div>
 
                     <div className="date-actions">
@@ -118,16 +137,23 @@ function App() {
                             <i className="bi bi-chevron-left"></i>
                         </button>
 
-                        <button
-                            className={`today-button ${
-                                isCurrentDay ? "inactive" : "active"
-                            }`}
-                            onClick={goToToday}
-                            disabled={isCurrentDay}
-                            aria-label="Go to today"
-                        >
-                            오늘
-                        </button>
+                        {today && (
+                            <button
+                                className="date-button"
+                                onClick={goToToday}
+                                aria-label="Go to today"
+                            >
+                                <span className="date-button-day">
+                                    {formatButtonDate(today).day}
+                                </span>
+                                <span className="date-button-month">
+                                    {formatButtonDate(today).month}
+                                </span>
+                                <span className="date-button-weekday">
+                                    ({formatButtonDate(today).weekday})
+                                </span>
+                            </button>
+                        )}
 
                         <button
                             className="icon-button"
